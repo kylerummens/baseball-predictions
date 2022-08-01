@@ -1,30 +1,22 @@
 import * as puppeteer from 'puppeteer';
 
 (async () => {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    await page.goto('https://www.baseball-reference.com/boxes/NYA/NYA202204080.shtml');
-    
-    const game_metadatas = await page.$$('.scorebox_meta');
 
-    if(game_metadatas.length) {
-        const game_metadata = game_metadatas[0];
+    const date = new Date('April 9, 2022');
 
-        const items = await game_metadata.$$('div');
+    const team = { code: 'SFN' };
 
-        for(const item of items) {
-            await item.evaluate(node => {
-                console.log('1');
-                console.log('1', node);
-            }).then(res => {
-                console.log(res);
-            })
-        }
+    const month = date.getMonth() + 1;
 
-    }
-    else {
-        console.log('No metadata found');
-    }
+    let date_string = date.getFullYear().toString()
+        + (month < 10 ? '0' + month.toString() : month.toString())
+        + (date.getDate() < 10 ? '0' + date.getDate().toString() : date.getDate().toString())
+        + '0';
 
-    await browser.close();
+    const game_url = `https://www.baseball-reference.com/boxes/${team.code}/${team.code}${date_string}.shtml`;
+
+    console.log(date);
+    console.log(date_string);
+    console.log(game_url);
+
 })();
